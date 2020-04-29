@@ -1,0 +1,54 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "options": {
+        "env": {
+            "initialHostName": "raspberrypi"
+            //"initialHostName": "192.168.1.26"   // try something like this if hostname doesn't work
+        }
+    },
+    "tasks": [
+        {
+            "label": "Modify SD Card for SSH access",
+            "type": "shell",
+            "command": "./Install/modifySDCard.sh",
+            "args": ["${input:bootDrive}", "${config:wifi.ssid}", "${config:wifi.psk}"],
+            "problemMatcher": []
+        },
+        {
+            "label": "Add public SSH key to Raspberry Pi",
+            "type": "shell",
+            "command": "./Install/sshConfigure.sh",
+            "args": [ "$initialHostName", "${input:piName}", "${input:staticIpAddress}" ],
+            "problemMatcher": []
+        },
+        {
+            "label": "Raspberry Pi Dotnet Install",
+            "type": "shell",
+            "command": "./Install/dotnetInstall.sh",
+            "args": [ "${input:piName}" ],
+            "problemMatcher": []
+        }
+    ],
+    "inputs": [
+        {
+            "id": "bootDrive",
+            "type": "promptString",
+            "description": "SD Card drive",
+            "default": "/d"
+        },
+        {
+            "id": "piName",
+            "type": "promptString",
+            "description": "Raspberry Pi Hostname",
+            "default": "your-rpi-name"
+        },
+        {
+            "id": "staticIpAddress",
+            "type": "promptString",
+            "description": "Static IP Address (empty for dynamic IP Address)",
+            "default": "192.168.1.200"
+        }
+    ]
+}

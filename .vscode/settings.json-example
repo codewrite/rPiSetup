@@ -1,0 +1,5 @@
+// Actual settings file should be named "settings.json"
+{
+    "wifi.ssid": "yourSSID",
+    "wifi.psk": "yourPSK"
+}
