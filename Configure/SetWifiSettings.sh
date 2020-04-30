@@ -9,6 +9,10 @@ if [ $# -ne 2 ]; then
   echo ''
   echo 'Example 1: SetWifiSettings.sh myRaspberryPi'
 else
+  if [ ! -f .vscode/settings.json ]; then
+    cp .vscode/settings.json-example .vscode/settings.json
+    sed -i "s@//.*@@g" .vscode/settings.json
+  fi
   sed -i "s@\("'"'"wifi\.Ssid"'"'"[ \t]*:[ \t]*"'"'"\)[^\"]*\("'"'"\)@\1$1\2@g" .vscode/settings.json
   sed -i "s@\("'"'"wifi\.Psk"'"'"[ \t]*:[ \t]*"'"'"\)[^\"]*\("'"'"\)@\1$2\2@g" .vscode/settings.json
 fi
