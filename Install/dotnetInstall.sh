@@ -27,6 +27,7 @@ else
     echo 'There should only be one file matching "dotnet-sdk-*.tar.gz" in the PiFiles folder'
     echo 'Please delete the others'
   else
+    dos2unix *.sh *.conf
     runCmd ssh pi@$1 "mkdir -p dotnetSetup"
     echo "mkdir ssh status: $?"
     runCmd scp "piDotnetInstall.sh dotnet-sdk-*.tar.gz dotnet-exports.sh" pi@$1:dotnetSetup
