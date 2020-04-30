@@ -15,6 +15,7 @@ else
     sed -e "s/your-ssid/$2/g" -e "s/your-psk/$3/g" <PiFiles/wpa_supplicant-template.conf >$1/wpa_supplicant.conf
     echo 'Success. Unmount (or eject) the SD card'
     echo 'Insert card into Raspberry Pi and power up. Wait for the Pi to start and then run sshConfigure'
+    echo 'Note: Before running sshConfigure, create a settings.json file with your router ssid and psk'
   else
     echo "Failed. Could not find a Pi image in drive $Drv or card is already modified"
     echo "If the card has just been written it may have been unmounted by the imaging program - try reinserting it"

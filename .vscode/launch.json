@@ -1,0 +1,57 @@
+{
+    // Use IntelliSense to find out which attributes exist for C# debugging
+    // Use hover for the description of the existing attributes
+    // For further information visit https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md
+    "version": "0.2.0",
+    "configurations": [
+         {
+             "name": "HelloWorld (remote)",
+             "type": "coreclr",
+             "request": "launch",
+             "preLaunchTask": "publish HelloWorld",
+             "program": "/usr/bin/dotnet/dotnet",
+             "args": ["${config:exe.HelloWorldProject}.dll"],
+             "cwd": "~/RemoteDebug/${config:exe.HelloWorldProject}",
+             "stopAtEntry": false,
+             "console": "internalConsole",
+             "pipeTransport": {
+                 "pipeCwd": "${workspaceFolder}",
+                 "pipeProgram": "ssh.exe",
+                 "pipeArgs": [
+                     "pi@${config:rpi.Name}"
+                 ],
+                 "debuggerPath": "/usr/bin/vsdbg/vsdbg"
+             }
+         },
+         {
+             "name": "HelloWorld (local)",
+             "type": "coreclr",
+             "request": "launch",
+             "preLaunchTask": "build HelloWorld",
+             "program": "${workspaceFolder}/DotnetProjects/${config:exe.HelloWorldProject}/bin/Debug/netcoreapp3.1/${config:exe.HelloWorldProject}.dll",
+             "args": [],
+             "cwd": "${workspaceFolder}/DotnetProjects/${config:exe.HelloWorldProject}",
+             "console": "internalConsole",
+             "stopAtEntry": false
+         },
+         {
+            "name": "Blink (remote)",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "publish Blink",
+            "program": "/usr/bin/dotnet/dotnet",
+            "args": ["${config:exe.BlinkProject}.dll"],
+            "cwd": "~/RemoteDebug/${config:exe.BlinkProject}",
+            "stopAtEntry": false,
+            "console": "internalConsole",
+            "pipeTransport": {
+                "pipeCwd": "${workspaceFolder}",
+                "pipeProgram": "ssh.exe",
+                "pipeArgs": [
+                    "pi@${config:rpi.Name}"
+                ],
+                "debuggerPath": "/usr/bin/vsdbg/vsdbg"
+            }
+        },
+    ]
+ }

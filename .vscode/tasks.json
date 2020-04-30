@@ -4,30 +4,77 @@
     "version": "2.0.0",
     "options": {
         "env": {
-            "initialHostName": "raspberrypi"
-            //"initialHostName": "192.168.1.26"   // try something like this if hostname doesn't work
+            "initialHostName": "raspberrypi",
+            //"initialHostName": "192.168.1.26",   // try something like this if hostname doesn't work
+            "helloWorldProject": "HelloWorld"
         }
     },
     "tasks": [
         {
-            "label": "Modify SD Card for SSH access",
+            "label": "1. Set Wifi Settings",
+            "type": "shell",
+            "command": "./Configure/SetWifiSettings.sh",
+            "args": [ "${input:wifiSsid}", "${input:wifiPsk}" ],
+            "problemMatcher": []
+        },
+        {
+            "label": "2. Modify SD Card for SSH access",
             "type": "shell",
             "command": "./Install/modifySDCard.sh",
             "args": ["${input:bootDrive}", "${config:wifi.ssid}", "${config:wifi.psk}"],
             "problemMatcher": []
         },
         {
-            "label": "Add public SSH key to Raspberry Pi",
+            "label": "3. Set Raspberry Pi Name",
             "type": "shell",
-            "command": "./Install/sshConfigure.sh",
-            "args": [ "$initialHostName", "${input:piName}", "${input:staticIpAddress}" ],
+            "command": "./Configure/SetRaspberryPiSettings.sh",
+            "args": [ "${input:piName}", "${input:staticIpAddress}" ],
             "problemMatcher": []
         },
         {
-            "label": "Raspberry Pi Dotnet Install",
+            "label": "4. Add public SSH key to Raspberry Pi",
+            "type": "shell",
+            "command": "./Install/sshConfigure.sh",
+            "args": [ "$initialHostName", "${config:rpi.Name}", "${config:rpi.StaticIpAddress}" ],
+            "problemMatcher": []
+        },
+        {
+            "label": "5. Raspberry Pi Dotnet Install",
             "type": "shell",
             "command": "./Install/dotnetInstall.sh",
-            "args": [ "${input:piName}" ],
+            "args": [ "${config:rpi.Name}" ],
+            "problemMatcher": []
+        },
+        {
+            "label": "build HelloWorld",
+            "type": "shell",
+            "command": "dotnet",
+            "args": [ "build", "./DotnetProjects/${config:exe.HelloWorldProject}/${config:exe.HelloWorldProject}.csproj",
+                      "/property:GenerateFullPaths=true", "/consoleloggerparameters:NoSummary" ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "publish HelloWorld",
+            "type": "shell",
+            "command": "./Scripts/publish.sh",
+            "args": [ "${config:exe.HelloWorldProject}", "${config:rpi.Name}" ],
+            "dependsOn": "build HelloWorld",
+            "problemMatcher": []
+        },
+        {
+            "label": "build Blink",
+            "type": "shell",
+            "command": "dotnet",
+            "args": [ "build", "./DotnetProjects/${config:exe.BlinkProject}/${config:exe.BlinkProject}.csproj",
+                      "/property:GenerateFullPaths=true", "/consoleloggerparameters:NoSummary" ],
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "publish Blink",
+            "type": "shell",
+            "command": "./Scripts/publish.sh",
+            "args": [ "${config:exe.BlinkProject}", "${config:rpi.Name}" ],
+            "dependsOn": "build Blink",
             "problemMatcher": []
         }
     ],
@@ -37,6 +84,18 @@
             "type": "promptString",
             "description": "SD Card drive",
             "default": "/d"
+        },
+        {
+            "id": "wifiSsid",
+            "type": "promptString",
+            "description": "WiFi SSID",
+            "default": "your-wifi-ssid"
+        },
+        {
+            "id": "wifiPsk",
+            "type": "promptString",
+            "description": "WiFi PSK",
+            "default": "your-wifi-psk"
         },
         {
             "id": "piName",
