@@ -27,13 +27,19 @@ else
   runCmd ssh-copy-id pi@$1
   if [ "$?" != '0' ]; then
     echo "Failed. Things to try:"
-    echo "1. Connect using ip address for initialHostName"
+    echo '1. Try running the command again'
+    echo "2. Try pinging $1 e.g. "'"'"ping -4 $1"'"'
+    echo '3. Connect using ip address for initialHostName (in tasks.json)'
+    echo 'If you have to use an ip address for initialHostName, it might also be a good idea to use a static ip address (step 3)'
   else
     remotePwd=$(runCmd ssh "pi@$1 -o NumberOfPasswordPrompts=0" "pwd")
     if [ "$remotePwd" != '/home/pi' ]; then
       echo "remotePwd = $remotePwd"
-      echo "Failed. Things to try:"
-      echo "1. Connect using ip address for initialHostName"
+      echo 'Failed. Things to try:'
+      echo '1. Try running the command again'
+      echo "2. Try pinging $1 e.g. "'"'"ping -4 $1"'"'
+      echo '3. Connect using ip address for initialHostName (in tasks.json)'
+      echo 'If you have to use an ip address for initialHostName, it might also be a good idea to use a static ip address (step 3)'
     else
       if [[ "$1" =~ ([0-9]+\.){3}[0-9]+ ]]; then
         hostname="raspberrypi"
