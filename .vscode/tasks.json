@@ -11,21 +11,21 @@
     },
     "tasks": [
         {
-            "label": "1. Set Wifi Settings",
+            "label": "1. Set Wifi Settings...",
             "type": "shell",
             "command": "./Configure/SetWifiSettings.sh",
             "args": [ "${input:wifiSsid}", "${input:wifiPsk}" ],
             "problemMatcher": []
         },
         {
-            "label": "2. Modify SD Card for SSH access",
+            "label": "2. Modify SD Card for SSH access...",
             "type": "shell",
             "command": "./Install/modifySDCard.sh",
             "args": ["${input:bootDrive}", "${config:wifi.Ssid}", "${config:wifi.Psk}"],
             "problemMatcher": []
         },
         {
-            "label": "3. Set Raspberry Pi Name",
+            "label": "3. Set Raspberry Pi Name...",
             "type": "shell",
             "command": "./Configure/SetRaspberryPiSettings.sh",
             "args": [ "${input:piName}", "${input:staticIpAddress}" ],
